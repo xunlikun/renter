@@ -15,7 +15,7 @@ module.exports = {
         //http://192.168.1.137:8081
         //http://122.224.152.194:18081
         //http://47.108.29.97:8081
-        target: 'http://192.168.2.9:8083',//接口域名
+        target: 'http://121.37.178.81:8083',//接口域名
         changeOrigin: true,//是否跨域
         pathRewrite: {
           '^/api': ''//需要rewrite重写

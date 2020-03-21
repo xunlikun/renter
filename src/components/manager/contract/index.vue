@@ -53,6 +53,8 @@
     </div>
     <div class='multiple_asing'>
         <Button type="success" @click='confirm'>批量签约</Button>
+        <Button style='float:right;margin-right:26px' type="success" @click='modal2 = true'>上传合同</Button>
+        <Button style='float:right;margin-right:26px' type="success" @click='downLoad("/api/renter/contract/download")'>合同模板下载</Button>
     </div>
     <Table @on-selection-change='selection' :data="contractData" :columns="tableColumns" :style='{minHeight:"500px"}' stripe></Table>
     <div style="margin: 10px;overflow: hidden">
@@ -78,6 +80,42 @@
             </Row>
         </Form>
     </Modal>
+    <Modal v-model="modal2">
+        <p slot="header">
+            <span>合同上传</span>
+        </p>
+        <div style="text-align:center">
+        <div style="text-align:left;margin: 16px 0 26px 0">
+            <span>请先选择合同类型:</span>
+            <Select v-model="uploadType" style="width:200px">
+                <Option value="constructor_company" key="constructor_company">框架合同</Option>
+                <Option value="project" key="project">租赁合同</Option>
+            </Select>
+        </div>
+            <Upload
+                :headers={authorization:token}
+                :data={templateType:uploadType}
+                name='contract'
+                type="drag"
+                action="api/renter/contract/upload"
+                show-upload-list
+                accept='xlsx,xls'
+                :format="['xlsx','xls']"
+                :on-success='success'
+                :on-error='error'
+                :on-format-error='formatError'
+                :before-upload='beforeUpload'
+                >
+                <div style="padding: 20px 0">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <p>点击上传或拖拽文件入内</p>
+                </div>
+                </Upload>
+        </div>
+        <div slot="footer">
+            
+        </div>
+    </Modal>
 </div>
 </template>
 <script>
@@ -87,6 +125,8 @@ import track from '@/utils/track.js'
 import { mapActions } from 'vuex'
 import { sign } from '@/api/contract.js'
 import { sendSignMobileCode } from '@/api/user.js'
+import { downLoad } from '@/utils/sma.js'
+import { mapGetters } from 'vuex'
 export default {
     data() {
         const validateText = (rule, value, callback) => {
@@ -97,7 +137,10 @@ export default {
                 // }
             };
         return {
+            uploadType:'',
+            downLoad:downLoad,
             modal1:false,
+            modal2:false,
             formInline:{},
             sendingAuth:false,
             mis:5,
@@ -262,8 +305,25 @@ export default {
     created() {
         this.init()
     },
+    computed: {
+        ...mapGetters(['token'])
+    },
     methods: {
         ...mapActions(['getContractList','down']),
+        beforeUpload(){
+            if(!this.uploadType){
+                return false
+            }
+        },
+        success(response, file, fileList){
+            this.init()
+        },
+        error(error, file, fileList){
+            
+        },
+        formatError(file, fileList){
+
+        },
         sendSignMobileCode(data){
                 sendSignMobileCode().then(res => {
                     if(res.status == '200'){

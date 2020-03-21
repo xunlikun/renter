@@ -5,10 +5,10 @@
                 <FormItem label="年度/月份" prop="currentDate">
                      <Cascader :data="timeDate" v-model="op.currentDate"></Cascader>
                 </FormItem>
-                <FormItem label="发票进度" prop="financialStatus">
+                <FormItem label="发票进度" prop="invoiceStatus">
                     <Select v-model="op.invoiceStatus">
-                        <Option value="1">已上传</Option>
-                        <Option value="0">未上传</Option>
+                        <Option value="1">待开票</Option>
+                        <Option value="2">已开票</Option>
                     </Select>
                 </FormItem>
                 <FormItem>
@@ -25,19 +25,50 @@
                 <Page :total="total" :current="current" @on-change="changePage"></Page>
             </div>
         </div>
+        <Modal v-model="modal2">
+        <p slot="header">
+            <span>发票上传</span>
+        </p>
+        <div style="text-align:center">
+            <Upload
+                :headers={authorization:token}
+                name='invoice'
+                :data='{id:id}'
+                type="drag"
+                action="api/renter/invoice/upload"
+                show-upload-list
+                accept='xlsx,xls'
+                :format="['xlsx','xls']"
+                :on-success='success'
+                :on-error='error'
+                :on-format-error='formatError'
+                :before-upload='beforeUpload'
+                >
+                <div style="padding: 20px 0">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <p>点击上传或拖拽文件入内</p>
+                </div>
+                </Upload>
+        </div>
+        <div slot="footer">
+            
+        </div>
+    </Modal>
     </div>
 </template>
 <script>
 import track from '@/utils/track.js'
-import { mapActions } from 'vuex'
-import { getInvoicAmount,getBalance } from '@/api/invoic.js'
+import { mapActions,mapGetters } from 'vuex'
+import { getInvoicAmount } from '@/api/invoic.js'
 export default {
     data() {
         return {
+            id:'',
+            modal2:false,
             balance:'0.00',
             payAmount:'0.00',
             op: {
-                    financialStatus:'0'
+                    
                 },
                 ruleCustom: {
                     contractCode: [
@@ -60,7 +91,7 @@ export default {
                         render:(h, params) => {
                             return h('a', {on:{
                                 click: () => {
-                                    this.gotoDetail({contractType:params.row.contractType,id:params.row.id})
+                                    // this.gotoDetail({contractType:params.row.contractType,id:params.row.id})
                                 }
                             }},params.row.contractCode);
                         }
@@ -85,9 +116,16 @@ export default {
                         title: '上传发票',
                         key: 'invoiceStatus',
                         render: (h, params) => {
-                            return h('button', {on:{click:function(){
-                                
-                            }}},'上传发票');
+                            let that = this
+                            if(params.row.invoiceStatus == 2){
+                                return h('span','已上传');
+                            }else {
+                                return h('Button', {on:{click:function(){
+                                    that.id = params.row.id
+                                    that.modal2 = true
+                                }}},'上传发票');
+                            }
+                            
                         }
                     }
                 ],
@@ -150,8 +188,25 @@ export default {
     created() {
         this.init()
     },
+    computed: {
+        ...mapGetters(['token'])
+    },
     methods: {
         ...mapActions(['getInvoicList']),
+        beforeUpload(){
+            if(!this.id){
+                return false
+            }
+        },
+        success(response, file, fileList){
+            this.init()
+        },
+        error(error, file, fileList){
+            
+        },
+        formatError(file, fileList){
+
+        },
         handleSubmit (name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {

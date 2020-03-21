@@ -75,6 +75,12 @@ export default new Router({
       },
       children:[
         {
+          path: '/manager/invoic',
+          name:'Invoic',
+          component: () => import('@/components/manager/invoic'),
+          meta:{keepAlive:true,title:['Invoic']}
+        },
+        {
           path: '/manager/company/basic',
           name:'Basic',
           component: () => import('@/components/manager/company/basic'),

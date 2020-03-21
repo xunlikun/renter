@@ -52,6 +52,10 @@
                             <Icon type="ios-analytics"></Icon>
                             人员管理
                         </MenuItem>
+                        <MenuItem class='layout-nav-item' name="1" to='/manager/invoic'>
+                            <Icon type="ios-navigate"></Icon>
+                            发票管理
+                        </MenuItem>
                             <Dropdown @on-click="calculate" class='layout-nav-item-right' trigger="click" style="margin-left: 20px">
                                 <a href="javascript:void(0)" style="color:#fff;font-size:14px">
                                     {{userInfo.userName}}
@@ -59,7 +63,7 @@
                                 </a>
                                 <DropdownMenu slot="list">
                                     <!-- <DropdownItem name="basic">基本信息</DropdownItem> -->
-                                    <DropdownItem name='safe'>安全</DropdownItem>
+                                    <!-- <DropdownItem name='safe'>安全</DropdownItem> -->
                                     <DropdownItem name='logOut'>退出登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
