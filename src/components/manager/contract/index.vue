@@ -90,6 +90,7 @@
             <Select v-model="uploadType" style="width:200px">
                 <Option value="constructor_company" key="constructor_company">框架合同</Option>
                 <Option value="project" key="project">租赁合同</Option>
+                <Option value="lease" key="lease">个人合同</Option>
             </Select>
         </div>
             <Upload
@@ -97,7 +98,7 @@
                 :data={templateType:uploadType}
                 name='contract'
                 type="drag"
-                action="api/renter/contract/upload"
+                action="/api/renter/contract/upload"
                 show-upload-list
                 accept='xlsx,xls'
                 :format="['xlsx','xls']"
