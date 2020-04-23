@@ -1,4 +1,4 @@
-import { getInvoicList } from '@/api/invoic.js'
+import { getInvoicList,confirmGetMoney } from '@/api/invoic.js'
 const state = {
     name:'contract'
 }
@@ -10,7 +10,10 @@ const mutations = {
 const actions = {
     async getInvoicList({state,commit},op){
         return await  getInvoicList(op)
-       }
+       },
+    async confirmGetMoney({state,commit},op){
+        return await confirmGetMoney(op)
+    }
 }
 
 export default {

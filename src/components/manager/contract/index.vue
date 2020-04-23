@@ -6,7 +6,7 @@
                 <Select v-model="op.contractType">
                     <Option value="constructor">框架合同</Option>
                     <Option value="project">租赁合同</Option>
-                    <Option value="lease">个人合同</Option>
+                    <Option value="personal">个人合同</Option>
                 </Select>
             </FormItem>
             <FormItem label="合同编号" prop="contractCode">
@@ -89,8 +89,9 @@
             <span>请先选择合同类型:</span>
             <Select v-model="uploadType" style="width:200px">
                 <Option value="constructor_company" key="constructor_company">框架合同</Option>
-                <Option value="project" key="project">租赁合同</Option>
-                <Option value="lease" key="lease">个人合同</Option>
+                <!-- <Option value="project" key="project">租赁合同</Option> -->
+                <Option value="machinery_company" key="machinery_company">小规模公司合同</Option>
+                <Option value="personal" key="personal">个人合同</Option>
             </Select>
         </div>
             <Upload

@@ -35,7 +35,7 @@
                 name='invoice'
                 :data='{id:id}'
                 type="drag"
-                action="api/renter/invoice/upload"
+                action="/api/renter/invoice/upload"
                 show-upload-list
                 accept='xlsx,xls'
                 :format="['xlsx','xls']"
@@ -118,7 +118,20 @@ export default {
                         render: (h, params) => {
                             let that = this
                             if(params.row.invoiceStatus == 2){
-                                return h('span','已上传');
+                                if(params.row.financialStatus == 1){
+                                    return h('span','已收款')
+                                }
+                                return h('Button',{on:{click:function(){
+                                    that.$Modal.confirm({
+                                        render:(h) => {
+                                            return h('span','确认已收款?')
+
+                                        },
+                                        onOk:() => {
+                                            that.confirmGetMoney({id:params.row.id})
+                                        }
+                                    })
+                                }}},'确认已收款');
                             }else {
                                 return h('Button', {on:{click:function(){
                                     that.id = params.row.id
@@ -192,7 +205,7 @@ export default {
         ...mapGetters(['token'])
     },
     methods: {
-        ...mapActions(['getInvoicList']),
+        ...mapActions(['getInvoicList','confirmGetMoney']),
         beforeUpload(){
             if(!this.id){
                 return false

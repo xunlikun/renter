@@ -26,3 +26,10 @@ export function submitInvoic(){
         method:'post'
     })
 }
+export function confirmGetMoney(data){
+    return request({
+        url:'/api/renter/invoice/confirmAmount',
+        method:'post',
+        data
+    })
+}
