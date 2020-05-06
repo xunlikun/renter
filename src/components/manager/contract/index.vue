@@ -6,7 +6,7 @@
                 <Select v-model="op.contractType">
                     <Option value="constructor">框架合同</Option>
                     <Option value="project">租赁合同</Option>
-                    <Option value="personal">个人合同</Option>
+                    <Option value="lease">个人合同</Option>
                 </Select>
             </FormItem>
             <FormItem label="合同编号" prop="contractCode">
